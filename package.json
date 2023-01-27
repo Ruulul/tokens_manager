@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "budo index.js:bundle.js --live --open",
-    "build": "browserify index.js -o cute_bundle.js && terser cute_bundle.js -o bundle.js"
+    "build": "browserify index.js -o cute_bundle.js && terser -c toplevel,sequences=false --mangle --ecma 6 cute_bundle.js > bundle.js"
   },
   "keywords": [],
   "author": "",
