@@ -5,13 +5,13 @@ const Component = {
         return (component = 'component', id) => `${component}-${id ?? count++}`
     })(),
     handle_handle(handle, type, msg) {
-        if (type in handle) handle[type].call(this, msg)
-        else console.trace("There is no handle for", type, ", emitted by", msg.head[0])
+        if (type in handle) handle[type](msg)
+        else console.trace("There is no handle for", type, ", emitted by", msg.head[0], "\nFull msg:", JSON.stringify(msg))
     },
     make_listen(handles) {
         return function (msg) {
             const { type } = msg
-            Component.handle_handle.call(this, handles, type, msg)
+            Component.handle_handle(handles, type, msg)
         }
     },
     make_protocol(obj_listen, protocol_fn) {
@@ -132,14 +132,8 @@ module.exports = Component('ui-track', {}, function (opts, notify) {
 
 function getTheme() {
     return `
-    :host {
-        display: table-cell;
-    }
     input {
         padding-right: 0.5em;
-
-        display: inline-block;
-        text-align: center;
     }
     `
 }
@@ -149,27 +143,28 @@ const Component = require('./Component')
 const Track = require('./Track')
 const AddTrack = require('./AddTrack')
 
+const track_protocol = self => make_protocol({
+    delete(msg) {
+        const index = self.tracks_id.findIndex(id => id === msg.head[0])
+        self.list.children[index].remove()
+        self.tracks_id.splice(index, 1)
+    }
+}, (_, id) => self.tracks_id.push(id))
+
+const add_track_protocol = self => make_protocol({
+    'new-track'(msg) {
+        const li = document.createElement("li")
+        li.append(Track(msg.data, track_protocol(self)))
+        self.list.append(li)
+    }
+})
+
 module.exports = Component('ui-tracks', {}, function (opts) {
     const list = document.createElement("ul")
     const tracks_id = []
+    const self = { list, tracks_id }
 
-    const track_protocol = make_protocol({
-        delete(msg) {
-            const index = tracks_id.findIndex(id => id === msg.head[0])
-            list.children[index].remove()
-            tracks_id.splice(index, 1)
-        }
-    }, (_, id) => tracks_id.push(id))
-
-    const add_track_protocol = make_protocol({
-        'new-track'(msg) {
-            const li = document.createElement("li")
-            li.append(Track(msg.data, track_protocol))
-            list.append(li)
-        }
-    })
-
-    const add_track = AddTrack({}, add_track_protocol)
+    const add_track = AddTrack({}, add_track_protocol(self))
 
     const style = document.createElement("style")
     style.textContent = opts.theme ?? getTheme()

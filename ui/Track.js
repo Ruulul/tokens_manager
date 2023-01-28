@@ -23,14 +23,8 @@ module.exports = Component('ui-track', {}, function (opts, notify) {
 
 function getTheme() {
     return `
-    :host {
-        display: table-cell;
-    }
     input {
         padding-right: 0.5em;
-
-        display: inline-block;
-        text-align: center;
     }
     `
 }
