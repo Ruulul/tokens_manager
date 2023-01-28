@@ -1,4 +1,4 @@
-const Component = {
+module.exports = {
     generateId: (_ => {
         let count = 0
         return (component = 'component', id) => `${component}-${id ?? count++}`
@@ -21,4 +21,3 @@ const Component = {
         }
     }
 }
-module.exports = Component
