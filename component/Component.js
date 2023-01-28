@@ -1,4 +1,4 @@
-module.exports = {
+const Component = {
     generateId: (_ => {
         let count = 0
         return (component = 'component', id) => `${component}-${id ?? count++}`
@@ -9,8 +9,7 @@ module.exports = {
     },
     make_listen(handles) {
         return function (msg) {
-            const { type } = msg
-            Component.handle_handle(handles, type, msg)
+            Component.handle_handle(handles, msg.type, msg)
         }
     },
     make_protocol(obj_listen, protocol_fn) {
@@ -21,3 +20,4 @@ module.exports = {
         }
     }
 }
+module.exports = Component
