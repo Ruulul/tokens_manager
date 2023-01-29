@@ -1,6 +1,6 @@
 const Component = require('./Component')
 
-module.exports = Component('ui-counter', {}, function (opts = {}) {
+module.exports = Component(function (opts = {}) {
     let count = opts.value ?? 0
 
     const plus = document.createElement("button")
