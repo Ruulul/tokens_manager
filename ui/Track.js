@@ -3,13 +3,13 @@ const Component = require('./Component')
 const Counter = require('./Counter')
 
 module.exports = Component(function (opts, protocol) {
-    const notify = protocol ? protocol(make_listen({}), generateId('ui-track')) : undefined;
+    const root = document.createElement("div")
+
+    const name =  generateId('ui-track')
+    const notify = protocol ? protocol(make_listen({}), name) : undefined;
     const label = document.createElement("input")
     label.placeholder = 'Track'
     label.textContent = opts.label ?? "Track"
-
-    const style = document.createElement("style")
-    style.textContent = opts.theme ?? getTheme()
 
     const counter = Counter()
 
@@ -17,16 +17,11 @@ module.exports = Component(function (opts, protocol) {
     close_btn.textContent = 'X'
 
     close_btn.onclick = _ => {
-        if (notify) notify({ type: 'delete' })
+        if (notify) notify({ head: [name], type: 'delete' });  
+        root.remove()
     }
 
-    return [style, label, counter, close_btn]
+    root.append(label, counter, close_btn)
+    
+    return [root]
 })
-
-function getTheme() {
-    return `
-    input {
-        padding-right: 0.5em;
-    }
-    `
-}

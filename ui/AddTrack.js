@@ -7,23 +7,11 @@ module.exports = Component(function (opts, protocol) {
     const button = document.createElement("button")
     button.textContent = opts.text ?? "Add Track"
 
-    const style = document.createElement("style")
-    style.textContent = opts.theme ?? getTheme()
-
     if (notify) button.onclick = async _ => {
         button.disabled = true
         await notify({ type: 'new-track' })
         button.disabled = false
     }
 
-    return [style, button]
+    return [button]
 })
-
-function getTheme() {
-    return `
-        button {
-            padding: 1em;
-            outline: none;
-        }
-    `
-}

@@ -26,17 +26,5 @@ module.exports = Component(function (opts) {
 
     const add_track = AddTrack({}, add_track_protocol(self))
 
-    const style = document.createElement("style")
-    style.textContent = opts.theme ?? getTheme()
-
-    return [style, add_track, list]
+    return [add_track, list]
 })
-
-function getTheme() {
-    return `
-        button {
-            padding: 1em;
-            outline: none;
-        }
-    `
-}
