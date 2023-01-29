@@ -19,7 +19,7 @@ const add_track_protocol = self => make_protocol({
     }
 })
 
-module.exports = Component('ui-tracks', {}, function (opts) {
+module.exports = Component(function (opts) {
     const list = document.createElement("ul")
     const tracks_id = []
     const self = { list, tracks_id }
