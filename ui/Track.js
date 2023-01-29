@@ -1,8 +1,7 @@
 const { make_listen, generateId } = require('../component/Component');
-const Component = require('./Component')
 const Counter = require('./Counter')
 
-module.exports = Component(function (opts, protocol) {
+module.exports = function (opts = {}, protocol) {
     const root = document.createElement("div")
 
     const name =  generateId('ui-track')
@@ -21,7 +20,7 @@ module.exports = Component(function (opts, protocol) {
         root.remove()
     }
 
-    root.append(label, counter, close_btn)
+    root.append(label, ...counter, close_btn)
     
     return [root]
-})
+}

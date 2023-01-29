@@ -1,7 +1,6 @@
 const { generateId, make_listen } = require('../component/Component')
-const Component = require('./Component')
 
-module.exports = Component(function (opts, protocol) {
+module.exports = function (opts, protocol) {
     const notify = protocol ? protocol(make_listen({}), generateId('ui-add-track')) : undefined;
 
     const button = document.createElement("button")
@@ -14,4 +13,4 @@ module.exports = Component(function (opts, protocol) {
     }
 
     return [button]
-})
+}

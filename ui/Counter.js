@@ -1,6 +1,4 @@
-const Component = require('./Component')
-
-module.exports = Component(function (opts = {}) {
+module.exports = function (opts = {}) {
     let count = opts.value ?? 0
 
     const root = document.createElement("div")
@@ -24,4 +22,4 @@ module.exports = Component(function (opts = {}) {
 
     root.append(minus, display, plus)
     return [root]
-})
+}

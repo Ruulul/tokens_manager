@@ -1,5 +1,4 @@
 const { make_protocol } = require('../component/Component')
-const Component = require('./Component')
 const Track = require('./Track')
 const AddTrack = require('./AddTrack')
 
@@ -14,17 +13,17 @@ const track_protocol = self => make_protocol({
 const add_track_protocol = self => make_protocol({
     'new-track'(msg) {
         const li = document.createElement("li")
-        li.append(Track(msg.data, track_protocol(self)))
+        li.append(...Track(msg.data, track_protocol(self)))
         self.list.append(li)
     }
 })
 
-module.exports = Component(function (opts) {
+module.exports = function () {
     const list = document.createElement("ul")
     const tracks_id = []
     const self = { list, tracks_id }
 
     const add_track = AddTrack({}, add_track_protocol(self))
 
-    return [add_track, list]
-})
+    return [...add_track, list]
+}
