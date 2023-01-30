@@ -20,7 +20,7 @@ module.exports = function (opts = {}, protocol) {
         root.remove()
     }
 
-    root.append(label, ...counter, close_btn)
+    root.append(label, counter, close_btn)
     
-    return [root]
+    return root
 }

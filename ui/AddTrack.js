@@ -12,5 +12,5 @@ module.exports = function (opts, protocol) {
         button.disabled = false
     }
 
-    return [button]
+    return button
 }

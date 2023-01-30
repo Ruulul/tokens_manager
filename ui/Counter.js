@@ -21,5 +21,5 @@ module.exports = function (opts = {}) {
     }
 
     root.append(minus, display, plus)
-    return [root]
+    return root
 }

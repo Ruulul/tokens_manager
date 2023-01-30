@@ -18,6 +18,11 @@ const Component = {
             if (protocol_fn) protocol_fn(notify, id)
             return listen
         }
+    },
+    wrap_dom(...elms) {
+        const el = new DocumentFragment()
+        el.append(...elms)
+        return el
     }
 }
 module.exports = Component
