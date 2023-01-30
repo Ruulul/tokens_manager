@@ -4,12 +4,12 @@ const Component = {
         return (component = 'component', id) => `${component}-${id ?? count++}`
     })(),
     handle_handle(handle, type, msg) {
-        if (type in handle) handle[type](msg)
+        if (type in handle) return handle[type](msg)
         else console.trace("There is no handle for", type, ", emitted by", msg.head[0], "\nFull msg:", JSON.stringify(msg))
     },
     make_listen(handles) {
         return function (msg) {
-            Component.handle_handle(handles, msg.type, msg)
+            return Component.handle_handle(handles, msg.type, msg)
         }
     },
     make_protocol(obj_listen, protocol_fn) {
@@ -19,10 +19,5 @@ const Component = {
             return listen
         }
     },
-    wrap_dom(...elms) {
-        const el = new DocumentFragment()
-        el.append(...elms)
-        return el
-    }
 }
 module.exports = Component

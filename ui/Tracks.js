@@ -1,4 +1,5 @@
-const { make_protocol, wrap_dom } = require('../component/Component')
+const { make_protocol } = require('../component/Component')
+const { wrap_dom } = require('./Component')
 const Track = require('./Track')
 const AddTrack = require('./AddTrack')
 

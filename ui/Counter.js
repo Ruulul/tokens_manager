@@ -1,5 +1,9 @@
-module.exports = function (opts = {}) {
+const { make_listen, generateId } = require("../component/Component")
+
+module.exports = function (opts = {}, protocol) {
     let count = opts.value ?? 0
+    const name = generateId('ui-counter')
+    const notify = protocol ? protocol(make_listen({}), name) : undefined
 
     const root = document.createElement("div")
     root.style.display = 'inline-block'
@@ -14,10 +18,12 @@ module.exports = function (opts = {}) {
     display.style.margin = '0.5em'
 
     plus.onclick = _ => {
-        display.textContent = ++count
+        notify({head: [name], type: 'increment'})
+        display.textContent = notify({head: [name], type: 'get'})
     }
     minus.onclick = _ => {
-        display.textContent = --count
+        notify({head: [name], type: 'decrement'})
+        display.textContent = notify({head: [name], type: 'get'})
     }
 
     root.append(minus, display, plus)
