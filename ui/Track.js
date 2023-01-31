@@ -11,7 +11,12 @@ module.exports = function (opts = {}, protocol) {
     label.placeholder = 'Track'
     label.textContent = opts.label ?? "Track"
 
-    const track = Track(opts)
+    let counter_notify
+    const track = Track(opts, make_protocol({
+        get(msg) {
+            counter_notify(msg)
+        }
+    }))
     const counter = Counter({}, make_protocol({
         increment() {
             track({ head: [name], type: 'update', data: { value: 1 } })
@@ -19,10 +24,10 @@ module.exports = function (opts = {}, protocol) {
         decrement() {
             track({ head: [name], type: 'update', data: { value: -1 } })
         },
-        get() {
-            return track({ head: [name], type: 'get' })
+        get(msg) {
+            track(msg)
         }
-    }))
+    }, notify => counter_notify = notify))
 
     const close_btn = document.createElement("button")
     close_btn.textContent = 'X'

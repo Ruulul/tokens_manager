@@ -13,12 +13,13 @@ module.exports = function Track(opts = {}, protocol) {
         reset() {
             value = opts.default_value ?? 0
         },
-        get() {
-            //notify({ head: [name], type: 'get', data: { value } })
-            return value
-        }
+        get: notify_value,
     })
-    protocol ? protocol(listen, name) : undefined
+    const notify = protocol ? protocol(listen, name) : undefined
 
     return listen
+
+    function notify_value(msg) {
+        if (notify) notify({ head: [name], type: 'get', data: { value } })
+    }
 }

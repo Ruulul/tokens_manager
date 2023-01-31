@@ -3,7 +3,6 @@ const { make_listen, generateId } = require("../component/Component")
 module.exports = function (opts = {}, protocol) {
     let count = opts.value ?? 0
     const name = generateId('ui-counter')
-    const notify = protocol ? protocol(make_listen({}), name) : undefined
 
     const root = document.createElement("div")
     root.style.display = 'inline-block'
@@ -17,15 +16,24 @@ module.exports = function (opts = {}, protocol) {
     display.textContent = count
     display.style.margin = '0.5em'
 
-    plus.onclick = _ => {
-        notify({head: [name], type: 'increment'})
-        display.textContent = notify({head: [name], type: 'get'})
-    }
-    minus.onclick = _ => {
-        notify({head: [name], type: 'decrement'})
-        display.textContent = notify({head: [name], type: 'get'})
-    }
+    const notify = protocol ? protocol(make_listen({
+        get(msg) {
+            display.textContent = msg.data.value
+        }
+    }), name) : undefined
+
+    plus.onclick = do_and_get('increment')
+    minus.onclick = do_and_get('decrement')
 
     root.append(minus, display, plus)
     return root
+
+    function do_and_get(type) {
+        return async _ => {
+            if (notify) {
+                await notify({ head: [name], type })
+                await notify({ head: [name], type: 'get' })
+            }
+        }
+    }
 }
